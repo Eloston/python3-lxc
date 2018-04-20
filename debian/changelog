@@ -1,3 +1,9 @@
+python3-lxc (3.0.1-0ubuntu1~bpo9+1) stretch-backports; urgency=medium
+
+  * Rebuild for stretch-backports.
+
+ -- Eloston <eloston@programmer.net>  Fri, 20 Apr 2018 19:49:22 +0000
+
 python3-lxc (3.0.1-0ubuntu1) bionic; urgency=medium
 
   * New upstream bugfix release:

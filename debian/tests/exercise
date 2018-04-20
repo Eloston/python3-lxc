@@ -1,0 +1,85 @@
+#!/bin/sh
+# Environment
+set -eu
+
+unset TMPDIR
+
+TEST_PASS=0
+TEST_FAIL=0
+TEST_IGNORED=0
+
+IGNORE_LIST=""
+
+# Helper functions
+pass() {
+    TEST_PASS=$((${TEST_PASS}+1))
+    echo "PASS: $1"
+}
+
+fail() {
+    for entry in $IGNORE_LIST; do
+        if [ "$entry" = "$2" ]; then
+            ignore $1
+            return
+        fi
+    done
+
+    TEST_FAIL=$((${TEST_FAIL}+1))
+    echo "FAIL: $1"
+
+    if [ -f "$3" ]; then
+        echo "---"
+        cat $3
+        echo "---"
+    fi
+}
+
+ignore() {
+    TEST_IGNORED=$((${TEST_IGNORED}+1))
+    echo "IGNORED: $*"
+}
+
+summary() {
+    echo ""
+    echo "SUMMARY: pass=$TEST_PASS, fail=$TEST_FAIL, ignored=$TEST_IGNORED"
+}
+
+# Source distro information
+[ -e /etc/lsb-release ] && . /etc/lsb-release
+
+# Workaround for broken gpg2
+if [ -n "${http_proxy:-}" ] && [ -e /usr/bin/dirmngr ]; then
+    dpkg-divert --divert /usr/bin/dirmngr.orig --rename --add /usr/bin/dirmngr
+    (
+    cat << EOF
+#!/bin/sh
+exec /usr/bin/dirmngr.orig --honor-http-proxy \$@
+EOF
+    ) > /usr/bin/dirmngr
+    chmod +x /usr/bin/dirmngr
+fi
+
+## Python3 testsuite
+STRING="python3: API"
+OUT=$(mktemp)
+PYTEST=$(mktemp)
+
+cat /usr/share/doc/python3-lxc/examples/api_test.py.gz | gzip -d > $PYTEST
+python3 $PYTEST >$OUT 2>&1 && pass "$STRING" || \
+    fail "$STRING" "python3" "$OUT"
+
+rm $PYTEST
+rm $OUT
+
+# Workaround for broken gpg2
+if [ -n "${http_proxy:-}" ] && [ -e /usr/bin/dirmngr ]; then
+    rm /usr/bin/dirmngr
+    dpkg-divert --divert /usr/bin/dirmngr.orig --rename --remove /usr/bin/dirmngr
+fi
+
+# Test summary
+summary
+
+[ "$TEST_FAIL" != "0" ] && exit 1
+
+exit 0

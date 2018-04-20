@@ -1,0 +1,5 @@
+Tests: exercise
+Depends: dirmngr,
+         lxc-utils,
+         @
+Restrictions: needs-root allow-stderr isolation-machine needs-recommends

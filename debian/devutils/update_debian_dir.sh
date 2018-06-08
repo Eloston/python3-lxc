@@ -15,8 +15,7 @@ pkgname=python3-lxc
 pkgsection=universe
 sources_xz_url="$pkgsite/dists/$distro/$pkgsection/source/Sources.xz"
 
-upstream_branch=upstream-ubuntu
-our_branch=stretch-backports
+source $(dirname $(readlink -f $0))/constants.sh
 
 # Functions
 function grep_block {
@@ -26,18 +25,11 @@ function grep_block {
 }
 
 # Go to root of repository if necessary
-if [ ! -d '.git' ]; then
-    cd $(dirname $(readlink -f $0))/../../
-    if [ ! -d '.git' ]; then
-        echo 'ERROR: Could not find root of git repository'
-        exit 1
-    fi
-fi
-
-# Abort if this isn't a git directory
+# Aborts if this isn't a git directory
+cd $(git rev-parse --show-toplevel)
 
 # We do this early to abort if there are uncommitted changes
-git checkout $upstream_branch
+git checkout $their_upstream_branch
 
 # Parse Sources.xz for package's debian.tar.xz
 pkg_info=$(curl "$sources_xz_url" | xz -d | grep_block "Package: $pkgname")
@@ -89,4 +81,4 @@ git commit --date="$(date --utc +%Y-%m-%dT%H:%M:%S%z)" -m "Import Debian directo
 
 # Switch back to our branch and begin merge
 git checkout $our_branch
-git merge $upstream_branch
+git merge $their_upstream_branch

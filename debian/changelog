@@ -1,4 +1,4 @@
-python3-lxc (1:3.0.1-0ubuntu1~bpo9+1) stretch-backports; urgency=medium
+python3-lxc (1:3.0.2-0~bpo9+1) stretch-backports; urgency=medium
 
   * Rebuild for stretch-backports.
 

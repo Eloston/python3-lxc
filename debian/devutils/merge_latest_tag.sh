@@ -6,8 +6,6 @@ source $(dirname $(readlink -f $0))/constants.sh
 
 cd $(git rev-parse --show-toplevel)
 
-setup_trap
-
 git remote add upstream https://github.com/lxc/python3-lxc.git || true
 git fetch upstream --tags
 

@@ -1,0 +1,26 @@
+python3-lxc (3.0.1-0ubuntu1) bionic; urgency=medium
+
+  * New upstream bugfix release:
+    - Fix building with newer setuptools releases.
+
+ -- Stéphane Graber <stgraber@ubuntu.com>  Tue, 27 Mar 2018 00:09:16 -0400
+
+python3-lxc (3.0.0-0ubuntu1) bionic; urgency=medium
+
+  * New upstream release:
+    - python3-lxc is now an out of tree binding.
+    - Announcement: https://linuxcontainers.org/lxc/news/
+
+ -- Stéphane Graber <stgraber@ubuntu.com>  Mon, 26 Mar 2018 23:34:54 -0400
+
+python3-lxc (3.0.0~beta1-0ubuntu2) bionic; urgency=medium
+
+  * Add missing build-dependency on pkg-config.
+
+ -- Stéphane Graber <stgraber@ubuntu.com>  Wed, 28 Feb 2018 22:12:42 -0500
+
+python3-lxc (3.0.0~beta1-0ubuntu1) bionic; urgency=low
+
+  * Initial release.
+
+ -- Stéphane Graber <stgraber@ubuntu.com>  Wed, 28 Feb 2018 15:36:52 -0500
